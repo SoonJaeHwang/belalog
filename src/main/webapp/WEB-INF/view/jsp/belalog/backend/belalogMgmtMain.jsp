@@ -5,24 +5,65 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
 $(function(){
-	console.log('Page Loading...');
-	
+// 화면 초기화
+initMgmtPage();
+});
+
+function initMgmtPage() {
+	// 검색버튼 클릭 이벤트
+	$('#btn_search').click(function(){
+		searchCustBasicInfo();
+	});
+
+	// 저장버튼 클릭 이벤트
 	$('#btn_save').click(function(){
 		saveCustBasicInfo();
 	});
-});
+}
+
+function searchCustBasicInfo() {
+	if ($('#searchKeyword').val() == null || $('#searchKeyword').val() == '') {
+		alert('검색조건을 입력해주세요.');
+		return false;
+	}
+	
+	var params = {
+					"custNm" : $('#searchKeyword').val().trim()
+				 };
+
+	$.ajax({
+		url         : '/belalog/backend/searchCustBasicInfo',
+		data        : JSON.stringify(params),
+		type        : 'POST',
+		contentType : 'application/json',
+		dataType    : 'json',
+		cache       : false,
+		success     : function(result) {
+			if (result.belalogCustDto != null) {
+				//alert('조회성공: ' + result.belalogCustDto.custNo + ', ' + result.belalogCustDto.custNm + ', ' + result.belalogCustDto.telNo);
+				$("#custNm").val(result.belalogCustDto.custNm);
+				$("#sex").val(result.belalogCustDto.sex);
+				$("#telNo").val(result.belalogCustDto.telNo);
+			} else {
+				alert('조회된 정보가 없습니다. 검색조건을 다시 확인해주세요.');
+			}
+		},
+		error       : function(jqXhr, status, error) {
+			alert(error);
+		}
+	});
+}
 
 function saveCustBasicInfo() {
-	//var custInfoForm = document.custInfoForm;
+//	var custInfoForm = document.custInfoForm;
 	
 	// 값 유효성 체크
 	if(!checkCustBasicInfo()) {
 		return false;
 	}
-
+	
 	var params = {
-					"custNo" : $('#custNo').val()
-				  , "custNm" : $('#custNm').val()
+					"custNm" : $('#custNm').val()
 				 };
 	
 	$.ajax({
@@ -33,7 +74,8 @@ function saveCustBasicInfo() {
 		dataType    : 'json',
 		cache       : false,
 		success     : function(result) {
-			alert(result.belalogCustDto.custNo);
+    		alert("고객정보가 성공적으로 등록되었습니다.");
+    		location.href = '';
 		},
 		error       : function(jqXhr, status, error) {
 			alert(error);
@@ -54,16 +96,26 @@ function checkCustBasicInfo() {
 	
 	return true;
 }
+
+// 검색버튼 Enter Key 적용
+function enterKey() {
+	if (window.event.keyCode == 13) {
+		searchCustBasicInfo();
+	}
+}
 </script>
-<meta charset="EUC-KR">
 <title>BMS : Belalog Management System</title>
 </head>
 <body>
-	<button type="button" id="btn_save">테슷흐버튼</button>
+	검색(이름): <input type="text" id="searchKeyword" value="" onkeyup="javascript:enterKey();"/><button type="button" id="btn_search">검색</button><br>
+	이름: <input type="text" id="custNm" value=""/><br>
+	성별: <input type="text" id="sex" value=""/><br>
+	연락처: <input type="text" id="telNo" value=""/><br>
+	<!--<button type="button" id="btn_save">테슷흐버튼</button>-->
 	<form id="custInfoForm" name="custInfoForm" method="post" enctype="multipart/form-data">
-		<input type="hidden" id="custNo" value="202003000002"/>
-		<input type="hidden" id="custNm" value="황순재"/>
-		<input type="hidden" id="telNo"  value="010"/>
+		<input type="hidden" id="custNo" value=""/>
+		<input type="hidden" id="custNm" value=""/>
+		<input type="hidden" id="telNo"  value=""/>
 	</form>
 </body>
 </html>

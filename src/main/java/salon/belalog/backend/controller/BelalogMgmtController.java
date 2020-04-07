@@ -39,6 +39,18 @@ public class BelalogMgmtController {
 		return "belalog/backend/belalogMgmtMain";
 	}
 	
+	@RequestMapping(value={"/belalog/backend/searchCustBasicInfo"}, method=RequestMethod.POST)
+	public ModelAndView searchCustBasicInfo(@RequestBody BelalogCustDto belalogCustDto, HttpServletRequest request, ModelMap model) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		
+		belalogCustDto = belalogMgmtService.selectCustBasicInfo(belalogCustDto);
+
+		mav.setView(jsonView);
+		mav.addObject("belalogCustDto", belalogCustDto);
+		
+		return mav;
+	}
+	
 	@RequestMapping(value={"/belalog/backend/saveCustBasicInfo"}, method=RequestMethod.POST)
 	public ModelAndView saveCustBasicInfo(@RequestBody BelalogCustDto belalogCustDto, HttpServletRequest request, ModelMap model) throws Exception {
 		ModelAndView mav = new ModelAndView();

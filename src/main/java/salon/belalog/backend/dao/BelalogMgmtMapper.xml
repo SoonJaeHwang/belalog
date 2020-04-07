@@ -54,6 +54,6 @@
                   GROUP BY ORD_NO)                         AS last_ord_dtl
              ,   CCM.RMRK_1                                AS rmrk1
         FROM     BELALOG.CU_CUST_MST CCM
-        WHERE    CCM.CUST_NO = #{custNo}
+        WHERE    CCM.CUST_NM = #{custNm}
 	</select>
 </mapper>
