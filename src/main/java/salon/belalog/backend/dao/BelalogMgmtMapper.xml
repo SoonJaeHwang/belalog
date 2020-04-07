@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salon.belalog.backend.dao.BelalogMgmtMapper">
+	<select id="selectCustBasicInfo" parameterType="salon.belalog.backend.dto.BelalogCustDto" resultType="salon.belalog.backend.dto.BelalogCustDto">
+        SELECT   CCM.CUST_NO                               AS custNo
+             ,   CCM.CUST_NM                               AS custNm
+             ,   CASE CCM.SEX
+                      WHEN 'M' THEN '남자'
+                      WHEN 'F' THEN '여자'
+                 END                                       AS sex
+             ,   CCM.REG_DTM                               AS regDtm
+             ,   (SELECT   CONCAT(SUBSTRING(CTACT_INF,1,3)
+                                , '-'
+                                , SUBSTRING(CTACT_INF,4,4)
+                                , '-'
+                                , SUBSTRING(CTACT_INF,8,4))
+                  FROM     BELALOG.CU_CUST_CTACT
+                  WHERE    CUST_NO = CCM.CUST_NO
+                  AND      CTACT_GBCD = '10')              AS telNo
+             ,   (SELECT   CTACT_INF
+                  FROM     BELALOG.CU_CUST_CTACT
+                  WHERE    CUST_NO = CCM.CUST_NO
+                  AND      CTACT_GBCD = '20')              AS emailAdr
+             ,   (SELECT   STAFF_NM
+                  FROM     BELALOG.CM_STAFF_MST
+                  WHERE    STAFF_ID = CCM.MGMT_STAFF_ID)   AS mgmtStaffNm
+             ,   (SELECT   REG_DTM
+                  FROM     BELALOG.OD_ORD_MST
+                  WHERE    CUST_NO = CCM.CUST_NO
+                  AND      ORD_STAT_GBCD = '30'
+                  ORDER BY REG_DTM DESC LIMIT 1)           AS lastVsitDtm
+             ,   (SELECT   CONCAT(MAX(CASE ORD_DTL_GBCD
+                                           WHEN '10' THEN '커트'
+                                           ELSE 'X'  END)
+                                , ', '
+                                , MAX(CASE ORD_DTL_GBCD
+                                           WHEN '20' THEN '펌'
+                                           ELSE 'X'  END)
+                                , ', '
+                                , MAX(CASE ORD_DTL_GBCD
+                                           WHEN '30' THEN '염색'
+                                           ELSE 'X'  END)
+                                , ', '
+                                , MAX(CASE ORD_DTL_GBCD
+                                           WHEN '40' THEN '매직'
+                                           ELSE 'X'  END)
+                                , ', '
+                                , MAX(CASE ORD_DTL_GBCD
+                                           WHEN '50' THEN '클리닉'
+                                           ELSE 'X'  END))
+                  FROM     BELALOG.OD_ORD_DTL
+                  WHERE    CUST_NO = CCM.CUST_NO
+                  GROUP BY ORD_NO)                         AS last_ord_dtl
+             ,   CCM.RMRK_1                                AS rmrk1
+        FROM     BELALOG.CU_CUST_MST CCM
+        WHERE    CCM.CUST_NO = #{custNo}
+	</select>
+</mapper>
