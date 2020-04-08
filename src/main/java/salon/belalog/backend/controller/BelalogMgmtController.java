@@ -36,6 +36,10 @@ public class BelalogMgmtController {
 
 	@RequestMapping(value={"/belalog/backend/belalogMgmtMain"})
 	public String salonMgmtMain(HttpServletRequest request, ModelMap model) throws Exception {
+		String custNo = request.getParameter("custNo");
+		
+		model.put("custNo", custNo);
+		
 		return "belalog/backend/belalogMgmtMain";
 	}
 	
@@ -55,10 +59,9 @@ public class BelalogMgmtController {
 	public ModelAndView saveCustBasicInfo(@RequestBody BelalogCustDto belalogCustDto, HttpServletRequest request, ModelMap model) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		
-		belalogMgmtService.selectCustBasicInfo(belalogCustDto);
-
 		mav.setView(jsonView);
 		mav.addObject("belalogCustDto", belalogCustDto);
+		mav.addObject("resultMsg", belalogMgmtService.saveCustBasicInfo(belalogCustDto));
 		
 		return mav;
 	}

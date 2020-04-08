@@ -5,5 +5,11 @@ import salon.belalog.backend.dto.BelalogCustDto;
 
 @Mapper
 public interface BelalogMgmtMapper {
-	public BelalogCustDto selectCustBasicInfo(BelalogCustDto belalogCustDto) throws Exception;
+	public BelalogCustDto selectCustBasicInfoByCustNm(BelalogCustDto belalogCustDto) throws Exception;
+	
+	public BelalogCustDto selectCustBasicInfoByCustNo(BelalogCustDto belalogCustDto) throws Exception;
+
+	public int insertCustBasicInfo(BelalogCustDto belalogCustDto);
+	
+	public int updateCustBasicInfo(BelalogCustDto belalogCustDto);
 }
