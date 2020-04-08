@@ -57,12 +57,12 @@ function searchCustBasicInfo() {
 				$('#searchKeywordCustNm').val(result.belalogCustDto.custNm);
 				$("#custNo").val(result.belalogCustDto.custNo);
 				$("#custNm").val(result.belalogCustDto.custNm);
-        	   	if (result.belalogCustDto.sex == 'M') {
-        	   		$('input:radio[id="sexM"]').attr('checked', true);
-        	   	} else {
-        	   		$('input:radio[id="sexF"]').attr('checked', true);
-        	   	}
 				$("#telNo").val(result.belalogCustDto.telNo);
+        	   	if (result.belalogCustDto.sex == 'M') {
+        	   		$('input:radio[id="sexMale"]').attr('checked', true);
+        	   	} else {
+        	   		$('input:radio[id="sexFemale"]').attr('checked', true);
+        	   	}
 			} else {
 				alert('조회된 정보가 없습니다. 검색조건을 다시 확인해주세요.');
 			}
@@ -96,7 +96,7 @@ function saveCustBasicInfo() {
 		cache       : false,
 		success     : function(result) {
 			if (result.resultMsg == "0000") {
-				alert("고객정보가 성공적으로 등록되었습니다.");
+				alert("고객정보 등록/수정이 성공적으로 처리되었습니다.");
 				location.href = '/belalog/backend/belalogMgmtMain?custNo=' + result.belalogCustDto.custNo;
 			} else {
 				alert(result.resultMsg);
@@ -141,7 +141,7 @@ function enterKey() {
 	검색(이름): <input type="text" id="searchKeywordCustNm" value="" onkeyup="javascript:enterKey();"/><button type="button" id="btn_search">검색</button>
 	<br><br>
 	- 이름: <input type="text" id="custNm" value=""/><br>
-	- 성별: M<input type="radio" id="sexM" name="sex" value="M" title="남자"/>&nbsp;F<input type="radio" id="sexF" name="sex" value="F" title="여자"/><br>
+	- 성별: M<input type="radio" id="sexMale" name="sex" value="M" title="남자"/>&nbsp;F<input type="radio" id="sexFemale" name="sex" value="F" title="여자"/><br>
 	- 연락처: <input type="text" id="telNo" value=""/><br>
 	<br>
 	<button type="button" id="btn_save">등록/수정</button>
