@@ -16,6 +16,9 @@ import salon.belalog.backend.dto.BelalogCustDto;
 import salon.belalog.backend.service.BelalogMgmtService;
 
 /**
+ * Add annotation for test
+ */
+/**
  * 
  * @author HSJ
  * @ref https://antdev.tistory.com/26 - Creating Spring Boot MVC
